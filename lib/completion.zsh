@@ -51,5 +51,5 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
         rpc rpcuser rpm shutdown squid sshd sync uucp vcsa xfs
 
 # ... unless we really want to.
-zstyle '*' single-ignored show`
+zstyle '*' single-ignored show
 
