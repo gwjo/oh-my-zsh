@@ -1,4 +1,4 @@
-## fixme - the load process here seems a bit bizarre
+# fixme - the load process here seems a bit bizarre
 
 unsetopt menu_complete   # do not autoselect the first completion entry
 unsetopt flowcontrol
@@ -71,5 +71,10 @@ zstyle ':completion:*:warnings' format '%B%U---- no match for: %d%u%b'
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:options' auto-description '%d'
 
+
+
+# disable named-directories autocompletion
+zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
+cdpath=(.)
 
 
