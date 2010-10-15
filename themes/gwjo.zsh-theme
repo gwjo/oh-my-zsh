@@ -40,11 +40,16 @@ gaz_precmd_hook() {
 
 
 PROMPT='%{$fg[cyan]%}-%{$fg_bold[blue]%}-(%{$fg[green]%}%n@%m:%l%{$fg_bold[blue]%})-%{$fg[cyan]%}${(e)PR_FILLBAR}%{$fg_bold[blue]%}-(%{$fg[magenta]%}%$PR_PWDLEN<...<%~%<<%{$fg_bold[blue]%})-%{$fg[cyan]%}-
--%{$fg_bold[blue]%}-(%(?..%{$fg[red]%}$?%{$fg_bold[blue]%}:)%{$fg[yellow]%}%T%{$fg_bold[blue]%}:%(!.%{$fg[red]%}.%{$fg[white]%})%#%{$fg_bold[blue]%})-%{$fg[cyan]%}- %{$reset_color%}'
+-%{$fg_bold[blue]%}-(%(?..%{$fg[red]%}$?%{$fg_bold[blue]%}:)%{$fg[yellow]%}%T%{$fg_bold[blue]%}:%(!.%{$fg[red]%}.%{$fg[white]%})%#$(git_prompt_info)%{$fg_bold[blue]%})-%{$fg[cyan]%}- %{$reset_color%}'
 
 PS2='%{$fg[cyan]%}-%{$fg_bold[blue]%}-(%{$fg[green]%}%_%{$fg_bold[blue]%})-%{$fg[cyan]%}- %{$reset_color%}'
 
 RPROMPT='  %{$fg[cyan]%}-%{$fg_bold[blue]%}-(%{$fg[yellow]%}%D{%a,%b%d}%{$fg_bold[blue]%})-%{$fg[cyan]%}-%{$reset_color%}'
 
+
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}:%{$fg[magenta]%}git:(%{$fg[red]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[magenta]%}) %{$fg[yellow]%}#%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 
 #  vim: set ft=zsh ts=4 sw=4 et:
