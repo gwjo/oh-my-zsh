@@ -73,7 +73,7 @@ function mkact() {
         return
     fi
 
-    local project = 'cleartool lsproject -cview -short 2> /dev/null'
+    local project=$(cleartool lsproject -cview -short 2> /dev/null)
 
     if [[ -z $project ]] ; then
         echo "Not in a view"

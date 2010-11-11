@@ -21,7 +21,6 @@ function uptags() {
 ## }}}
 
 ## {{{ change to directory based on SD stream
-
 #
 # Usage:
 #
@@ -77,5 +76,49 @@ alias sip= 'app_cd sip'
 alias account='acme_cd lib/accounting lib/accounting'
 alias common='acme_cd lib/common lib/common'
 alias dam='acme_cd lib/dam lib/dam'
+
+## }}}
+## {{{ rebase and build an stream
+#
+# Usage:
+#
+#  rebase [make]
+#  rebase <view> [make]
+#
+function rebase() {
+
+    local do_make
+    local cc_view
+    local cc_base
+
+    ## see if the first parameter is a view
+    if [[ -n $1 && $1 != "make" ]] ; then
+        cc_view=$1
+        shift
+    fi
+
+    ## check for make option
+    if [[ -n $1 && $1 == "make" ]] ; then
+        do_make="true"
+    fi
+
+    # change to speficied view
+    if [[ -n $cc_view ]] ; then
+        sv $cc_view
+    fi
+
+    cc_base=$(/usr/local/acme/bin/ccbase)
+    if [[ -z $cc_base ]] ; then
+        echo "Not in a view"
+        return
+    fi
+
+    /usr/local/acme/bin/ccrebase -latest
+    /usr/local/acme/bin/ccrebase -complete
+
+    if [[ -n $do_make ]] ; then
+        sdmake
+    fi
+}
 
 ## }}}
