@@ -71,7 +71,7 @@ alias h248='app_cd h248'
 alias h323='app_cd h323'
 alias mbcd='app_cd mbcd'
 alias mgcp='app_cd algd'   # use this instead of algd (sd2 only)
-alias sip= 'app_cd sip'
+alias sip='app_cd sip'
 
 alias account='acme_cd lib/accounting lib/accounting'
 alias common='acme_cd lib/common lib/common'
