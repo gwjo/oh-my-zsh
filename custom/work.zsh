@@ -76,6 +76,7 @@ alias sip='app_cd sip'
 alias account='acme_cd lib/accounting lib/accounting'
 alias common='acme_cd lib/common lib/common'
 alias dam='acme_cd lib/dam lib/dam'
+alias sig='acme_cd lib/sig lib/sig' # sd4 only
 
 ## }}}
 ## {{{ rebase and build an stream
