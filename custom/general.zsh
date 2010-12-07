@@ -10,7 +10,7 @@ alias which >&/dev/null && unalias which
 ## {{{ Watch for other users
 
 LOGCHECK=60
-WATCHFMT="[%B%t%b] %B%n%b has %a %B%l%b from %B%M%b"
+WATCHFMT="[%B%T %w%b] %B%n%b has %a %B%l%b from %B%M%b"
 WATCH=notme
 
 ## }}}
