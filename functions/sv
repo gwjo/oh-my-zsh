@@ -1,6 +1,10 @@
 #autoload
 
 function sv {
+    setopt    local_options \
+           NO_xtrace        \
+              extended_glob
+
     local integration
     local opt
     local view
@@ -72,14 +76,17 @@ function sv {
     # view name directory
     if [[ -z $view ]] ; then
         if [[ -z $integration ]] ; then
-            view="${HOME}/cc/(|gowen_)(#i)$1(:/)"
+            view=(${HOME}/cc/(|gowen_)(#i)$1(:/))
         else
-            view="${HOME}/cc/(|gowen_)(#i)${1}_integration(:/)"
+            view=(${HOME}/cc/(|gowen_)(#i)${1}_integration(:/))
         fi
     fi
 
     # check that view exists
+    pwd
+    echo ${view}
     { cd ${~view} } 2> /dev/null
+    pwd
 
     # echo the view to the command line
     view=$(pwd)

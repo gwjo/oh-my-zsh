@@ -1,6 +1,12 @@
 ## Some development related stuff
 
+## {{{ autoload work functions
+
+autoload sv
+
+## }}}
 ## {{{ update tags and cscopte
+
 
 
 function uptags() {
