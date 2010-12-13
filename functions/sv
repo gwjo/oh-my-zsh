@@ -83,10 +83,7 @@ function sv {
     fi
 
     # check that view exists
-    pwd
-    echo ${view}
     { cd ${~view} } 2> /dev/null
-    pwd
 
     # echo the view to the command line
     view=$(pwd)
