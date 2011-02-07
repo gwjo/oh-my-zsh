@@ -20,7 +20,7 @@ function uptags() {
 
     print -rC1 ${ccviewtop}/**/*.[ch](|pp) > ${ccviewtop}/cscope.files
 
-    /usr/bin/cscope -b -i $ccviewtop/cscope.files -f $ccviewtop/cscope.out
+    #/usr/bin/cscope -b -i $ccviewtop/cscope.files -f $ccviewtop/cscope.out
     /usr/bin/ctags -L $ccviewtop/cscope.files --extra=+q -o $ccviewtop/tags
 }
 
@@ -75,6 +75,7 @@ alias algd='app_cd algd'   # sd2 only
 alias atcp='app_cd atcp'
 alias h248='app_cd h248'
 alias h323='app_cd h323'
+alias lem='app_cd lem'
 alias mbcd='app_cd mbcd'
 alias mgcp='app_cd algd'   # use this instead of algd (sd2 only)
 alias sip='app_cd sip'

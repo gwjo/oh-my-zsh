@@ -23,7 +23,7 @@ function cc_set_ccbase() {
 }
 
 
-function ppcod() {
+function od() {
     local opt
     local objectfile
     
@@ -41,7 +41,72 @@ function ppcod() {
     (( OPTIND > 1)) && shift $(( OPTIND - 1 ))
 
 
-    cc_set_ccbase()
+    cc_set_ccbase
+#    if [[ cc_set_ccbase() ]] ; then
+#        return 1
+#    fi
+
+
+    local WIND_VERSION=`bash $CC_BASE/acme/lib/common/acmeVersion.sh -wind`
+
+    # setup environment
+    $WIND_VERSION
+
+    if [[ -z $objectfile ]]; then
+        objectfile="vxWorks";
+    fi
+
+
+    echo $path
+    echo `which objdumppentium`
+    echo "objdump ... ${1} to ${2}"
+    if [[ $WIND_VERSION == "vxe33a" ]]; then
+        objdumppentium -C -d -l -S --start-address=${1} --stop-address=${2} vxKernel.sm
+    else
+        objdumppentium -C -d -l -S --start-address=${1} --stop-address=${2} $objectfile
+    fi
+}
+
+function ppcod() {
+    local opt
+    local objectfile
+    local disOpt="-d"
+    local sourceOpt="-l -S"
+    local dumpCmd="objdumpppc"
+    
+    # loop continues till options finished
+    while getopts ahiso: opt; do
+        case $opt in
+            (a)
+                disOpt="-D"
+                ;;
+            (i)
+                dumpCmd="objdumppentium"
+            (o)
+                objectfile="$OPTARG"
+                ;;
+            (s)
+                sourceOpt=""
+                ;;
+            (h)
+            \?)
+                echo >&2 \
+                "usage: $0 [-a] [-s] [-o objectfile] <start address> <end address>"
+                return 1
+                ;;
+        esac
+    done
+    (( OPTIND > 1)) && shift $(( OPTIND - 1 ))
+
+    
+    if [[ -z ${2} ]]; then
+        echo >&2 \
+            "usage: $0 [-a] [-s] [-o objectfile] <start address> <end address>"
+        return 1
+    fi
+
+
+    cc_set_ccbase
 #    if [[ cc_set_ccbase() ]] ; then
 #        return 1
 #    fi
@@ -59,9 +124,9 @@ function ppcod() {
 
     echo "objdumpppc ... ${1} to ${2}"
     if [[ $WIND_VERSION == "vxe33a" ]]; then
-        objdumpppc -C -d -l -S --start-address=${1} --stop-address=${2} vxKernel.sm
+        $dumpCmd -C $disOpt $sourceOpt --start-address=${1} --stop-address=${2} vxKernel.sm
     else
-        objdumpppc -C -d -l -S --start-address=${1} --stop-address=${2} $objectfile
+        $dumpCmd -C $disOpt $sourceOpt --start-address=${1} --stop-address=${2} $objectfile
     fi
 }
 
@@ -80,5 +145,16 @@ function mkact() {
     else
         cleartool mkact gowen_${(L)project}_$1
     fi
+}
+
+function ctlocks() {
+    local project=$(cleartool lsproject -cview -short 2> /dev/null)
+
+    if [[ -z $project ]] ; then
+        echo "Not in a view"
+    else
+        cleartool lslock -short brtype:${project}_integration@/projects
+    fi
+
 }
 
