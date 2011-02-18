@@ -24,54 +24,15 @@ function cc_set_ccbase() {
 
 
 function od() {
-    local opt
-    local objectfile
-    
-    # loop continues till options finished
-    while getopts o: opt; do
-        case $opt in
-            (o)
-                objectfile="$OPTARG"
-                ;;
-            \?)
-                return 0
-                ;;
-        esac
-    done
-    (( OPTIND > 1)) && shift $(( OPTIND - 1 ))
-
-
-    cc_set_ccbase
-#    if [[ cc_set_ccbase() ]] ; then
-#        return 1
-#    fi
-
-
-    local WIND_VERSION=`bash $CC_BASE/acme/lib/common/acmeVersion.sh -wind`
-
-    # setup environment
-    $WIND_VERSION
-
-    if [[ -z $objectfile ]]; then
-        objectfile="vxWorks";
-    fi
-
-
-    echo $path
-    echo `which objdumppentium`
-    echo "objdump ... ${1} to ${2}"
-    if [[ $WIND_VERSION == "vxe33a" ]]; then
-        objdumppentium -C -d -l -S --start-address=${1} --stop-address=${2} vxKernel.sm
-    else
-        objdumppentium -C -d -l -S --start-address=${1} --stop-address=${2} $objectfile
-    fi
+    ppcod -i $*
 }
 
 function ppcod() {
+    set +x
     local opt
     local objectfile
     local disOpt="-d"
-    local sourceOpt="-l -S"
+    local sourceOpt="-C -l -S"
     local dumpCmd="objdumpppc"
     
     # loop continues till options finished
@@ -82,14 +43,14 @@ function ppcod() {
                 ;;
             (i)
                 dumpCmd="objdumppentium"
+                ;;
             (o)
                 objectfile="$OPTARG"
                 ;;
             (s)
                 sourceOpt=""
                 ;;
-            (h)
-            \?)
+            (h|\?)
                 echo >&2 \
                 "usage: $0 [-a] [-s] [-o objectfile] <start address> <end address>"
                 return 1
@@ -101,7 +62,7 @@ function ppcod() {
     
     if [[ -z ${2} ]]; then
         echo >&2 \
-            "usage: $0 [-a] [-s] [-o objectfile] <start address> <end address>"
+            "usage: $0 [-a] [-i] [-s] [-o objectfile] <start address> <end address>"
         return 1
     fi
 
@@ -119,15 +80,14 @@ function ppcod() {
 
     if [[ -z $objectfile ]]; then
         objectfile="vxWorks";
+
+        if [[ $WIND_VERSION == "vxe33a" ]]; then
+            objectfile="vxKernel.sm"
+        fi
     fi
 
-
-    echo "objdumpppc ... ${1} to ${2}"
-    if [[ $WIND_VERSION == "vxe33a" ]]; then
-        $dumpCmd -C $disOpt $sourceOpt --start-address=${1} --stop-address=${2} vxKernel.sm
-    else
-        $dumpCmd -C $disOpt $sourceOpt --start-address=${1} --stop-address=${2} $objectfile
-    fi
+    echo "$dumpCmd $disOpt $sourceOpt --start-address=${1} --stop-address=${2} $objectfile"
+    $dumpCmd $disOpt $sourceOpt --start-address=${1} --stop-address=${2} $objectfile
 }
 
 
