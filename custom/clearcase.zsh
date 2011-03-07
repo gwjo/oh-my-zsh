@@ -31,15 +31,15 @@ function ppcod() {
     set +x
     local opt
     local objectfile
-    local disOpt="-d"
-    local sourceOpt="-C -l -S"
+    local disOpt="d"
+    local sourceOpt="CSl"
     local dumpCmd="objdumpppc"
     
     # loop continues till options finished
     while getopts ahiso: opt; do
         case $opt in
             (a)
-                disOpt="-D"
+                disOpt="D"
                 ;;
             (i)
                 dumpCmd="objdumppentium"
@@ -86,8 +86,8 @@ function ppcod() {
         fi
     fi
 
-    echo "$dumpCmd $disOpt $sourceOpt --start-address=${1} --stop-address=${2} $objectfile"
-    $dumpCmd $disOpt $sourceOpt --start-address=${1} --stop-address=${2} $objectfile
+    echo "$dumpCmd -${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile"
+    $dumpCmd -${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile
 }
 
 
