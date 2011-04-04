@@ -113,7 +113,12 @@ function ctlocks() {
     if [[ -z $project ]] ; then
         echo "Not in a view"
     else
-        cleartool lslock -short brtype:${project}_integration@/projects
+        local opts="-short"
+        if [[ $1 == "-l"  ]] ; then
+            opts=""
+        fi
+
+        cleartool lslock $opts brtype:${project}_integration@/projects
     fi
 
 }

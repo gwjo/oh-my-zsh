@@ -3,6 +3,7 @@
 ## {{{ autoload work functions
 
 autoload sv
+autoload _clearcase_getviews
 
 ## }}}
 ## {{{ update tags and cscopte
@@ -128,5 +129,10 @@ function rebase() {
         sdmake
     fi
 }
+
+## }}}
+## {{{ Application launch aliases
+
+alias wireshark='wireshark -a filesize:102400'
 
 ## }}}
