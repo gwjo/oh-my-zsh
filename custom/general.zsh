@@ -14,5 +14,9 @@ WATCHFMT="[%B%T %w%b] %B%n%b has %a %B%l%b from %B%M%b"
 WATCH=notme
 
 ## }}}
+## {{{ Options
 
+setopt NO_beep          # Turn of the stupid beep
+
+## }}}
 
