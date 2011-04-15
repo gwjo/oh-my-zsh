@@ -137,3 +137,96 @@ function rebase() {
 alias wireshark='wireshark -a filesize:102400'
 
 ## }}}
+## {{{ set CCBASE environment variable
+
+function cc_set_ccbase() {
+    local base=`/usr/local/acme/bin/ccbase`
+
+    CC_BASE=""
+    if [[ "x$base" != "x" ]] ; then
+        if [[ -d $base/sd_iv ]] ; then
+            CC_BASE=$base/sd_iv
+        else
+            CC_BASE=$base
+        fi
+    elif [[ "x$CC_BASE" = "x" ]] ; then
+        echo "**********************************"
+        echo "*** ERROR: No CC View selected ***"
+        echo "**********************************"
+        return 1
+    fi
+}
+
+## }}}
+## {{{ Pentium objdump
+
+function od() {
+    ppcod -i $*
+}
+
+## }}}
+## {{{ Objdump (by default ppc)
+
+function ppcod() {
+    set +x
+    local opt
+    local objectfile
+    local disOpt="d"
+    local sourceOpt="CSl"
+    local dumpCmd="objdumpppc"
+
+    # loop continues till options finished
+    while getopts ahiso: opt; do
+        case $opt in
+            (a)
+                disOpt="D"
+                ;;
+            (i)
+                dumpCmd="objdumppentium"
+                ;;
+            (o)
+                objectfile="$OPTARG"
+                ;;
+            (s)
+                sourceOpt=""
+                ;;
+            (h|\?)
+                echo >&2 \
+                "usage: $0 [-a] [-s] [-o objectfile] <start address> <end address>"
+                return 1
+                ;;
+        esac
+    done
+    (( OPTIND > 1)) && shift $(( OPTIND - 1 ))
+
+
+    if [[ -z ${2} ]]; then
+        echo >&2 \
+            "usage: $0 [-a] [-i] [-s] [-o objectfile] <start address> <end address>"
+        return 1
+    fi
+
+    cc_set_ccbase
+#    if [[ cc_set_ccbase() ]] ; then
+#        return 1
+#    fi
+
+    local WIND_VERSION=`bash $CC_BASE/acme/lib/common/acmeVersion.sh -wind`
+
+    # setup environment
+    $WIND_VERSION
+
+    if [[ -z $objectfile ]]; then
+        objectfile="vxWorks";
+
+        if [[ $WIND_VERSION == "vxe33a" ]]; then
+            objectfile="vxKernel.sm"
+        fi
+    fi
+
+    echo "$dumpCmd -${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile"
+    $dumpCmd -${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile
+}
+
+## }}}
+

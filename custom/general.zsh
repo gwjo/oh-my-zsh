@@ -19,6 +19,10 @@ WATCH=notme
 REPORTTIME=60
 
 ## }}}
+## {{{ Options
 
+setopt NO_beep          # Turn of the stupid beep
+
+## }}}
 
 
