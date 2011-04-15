@@ -7,12 +7,18 @@
 alias which >&/dev/null && unalias which
 
 ## }}}
-## {{{ Watch for other users
+## {{{ Shell parameters
 
+## Report who logs into my machines
 LOGCHECK=60
 WATCHFMT="[%B%T %w%b] %B%n%b has %a %B%l%b from %B%M%b"
 WATCH=notme
 
+## Let me if a command runs longer than a minute.  Useful
+## for timing builds
+REPORTTIME=60
+
 ## }}}
+
 
 
