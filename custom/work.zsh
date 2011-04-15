@@ -74,6 +74,7 @@ alias inc='acme_cd include/acme include'
 alias acli='app_cd acli'
 alias algd='app_cd algd'   # sd2 only
 alias atcp='app_cd atcp'
+alias collect='app_cd collect'
 alias h248='app_cd h248'
 alias h323='app_cd h323'
 alias lem='app_cd lem'
