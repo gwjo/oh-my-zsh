@@ -8,9 +8,6 @@ setopt always_to_end
 
 WORDCHARS=''
 
-autoload -U compinit
-compinit -i
-
 zmodload -i zsh/complist
 
 ## case-insensitive (all),partial-word and then substring completion
@@ -57,7 +54,6 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
 
 # ... unless we really want to.
 zstyle '*' single-ignored show
-
 
 # disable named-directories autocompletion
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
