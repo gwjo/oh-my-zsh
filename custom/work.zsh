@@ -168,7 +168,16 @@ function od() {
 ## {{{ Objdump (by default ppc)
 
 function ppcod() {
-    set +x
+    emulate -L zsh
+
+    # Pesky bash WINDVERSION changes uses the non-standard bash format:
+    #
+    #  if [ $string == "blah" ]
+    #
+    # which means we need to ensure the EQUALS option is not set
+    #
+    unsetopt equals
+
     local opt
     local objectfile
     local disOpt="d"
