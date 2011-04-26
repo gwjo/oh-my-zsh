@@ -1,5 +1,13 @@
 ## Some development related stuff
+##
+## Only run on work machines
+[[ $HOSTNAME[1,4] != "acme" ]] && return
 
+## {{{ Fix various things on my development machine
+
+[[ -e $HOME/.man.config ]] && alias man="nocorrect man -C $HOME/.man.config" 
+
+## }}}
 ## {{{ autoload work functions
 
 autoload sv
@@ -7,8 +15,6 @@ autoload _clearcase_getviews
 
 ## }}}
 ## {{{ update tags and cscopte
-
-
 
 function uptags() {
 
