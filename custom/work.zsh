@@ -167,13 +167,21 @@ function cc_set_ccbase() {
 ## {{{ Pentium objdump
 
 function od() {
-    ppcod -i $*
+    sd_objdump -i $*
+}
+
+function mipsod() {
+    sd_objdump -m $*
+}
+
+function ppcod() {
+    sd_objdump $*
 }
 
 ## }}}
 ## {{{ Objdump (by default ppc)
 
-function ppcod() {
+function sd_objdump() {
     emulate -L zsh
 
     # Pesky bash WINDVERSION changes uses the non-standard bash format:
@@ -191,13 +199,16 @@ function ppcod() {
     local dumpCmd="objdumpppc"
 
     # loop continues till options finished
-    while getopts ahiso: opt; do
+    while getopts ahimswo: opt; do
         case $opt in
             (a)
                 disOpt="D"
                 ;;
             (i)
                 dumpCmd="objdumppentium"
+                ;;
+            (m)
+                dumpCmd="objdumpmips"
                 ;;
             (o)
                 objectfile="$OPTARG"
@@ -239,8 +250,8 @@ function ppcod() {
         fi
     fi
 
-    echo "$dumpCmd -${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile"
-    $dumpCmd -${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile
+    echo "$dumpCmd -w${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile"
+    $dumpCmd -w${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile
 }
 
 ## }}}
