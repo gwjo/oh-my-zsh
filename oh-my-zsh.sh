@@ -1,3 +1,9 @@
+# Check for updates on initial load...
+if [ "$DISABLE_AUTO_UPDATE" != "true" ]
+then
+  /usr/bin/env zsh $ZSH/tools/check_for_upgrade.sh
+fi
+
 # Initializes Oh My Zsh
 
 # add a function path
@@ -28,7 +34,6 @@ done
 for config_file ($ZSH/custom/*.zsh) source $config_file
 
 # Load the theme
-# Check for updates on initial load...
 if [ "$ZSH_THEME" = "random" ]
 then
   themes=($ZSH/themes/*zsh-theme)
@@ -41,14 +46,10 @@ then
   unset N
   unset RANDOM_THEME
 else
-  source "$ZSH/themes/$ZSH_THEME.zsh-theme"
-fi
-
-
-# Check for updates on initial load...
-if [ "$DISABLE_AUTO_UPDATE" != "true" ]
-then
-  /usr/bin/env zsh $ZSH/tools/check_for_upgrade.sh
+  if [ ! "$ZSH_THEME" = ""  ]
+  then
+    source "$ZSH/themes/$ZSH_THEME.zsh-theme"
+  fi
 fi
 
 # remove locally used variables
