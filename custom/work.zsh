@@ -240,6 +240,7 @@ function sd_objdump() {
     local WIND_VERSION=`bash $CC_BASE/acme/lib/common/acmeVersion.sh -wind`
 
     # setup environment
+    TCLLIBPATH=""
     $WIND_VERSION
 
     if [[ -z $objectfile ]]; then
