@@ -195,7 +195,7 @@ function sd_objdump() {
     local opt
     local objectfile
     local disOpt="d"
-    local sourceOpt="CSl"
+    local sourceOpt="Sl"
     local dumpCmd="objdumpppc"
 
     # loop continues till options finished
@@ -239,9 +239,18 @@ function sd_objdump() {
 
     local WIND_VERSION=`bash $CC_BASE/acme/lib/common/acmeVersion.sh -wind`
 
-    # setup environment
+    # TCLLIBPATH:
+    #   Need to save and restore the environ variable because of a stupid bug
+    #   the environment setup script that relies on some incorrect behavior
+    #   of BASH
+    local savedTclLibPath=${TCLLIBPATH}
     TCLLIBPATH=""
+
+    # setup environment
     $WIND_VERSION
+
+    # Restore TCLLIBPATH
+    TCLLIBPATH=${savedTclLibPath}
 
     if [[ -z $objectfile ]]; then
         objectfile="vxWorks";
@@ -251,8 +260,9 @@ function sd_objdump() {
         fi
     fi
 
-    echo "$dumpCmd -w${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile"
-    $dumpCmd -w${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile
+    # always use wide-screen and demangle names options
+    echo "$dumpCmd -wC${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile"
+    $dumpCmd -wC${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile
 }
 
 ## }}}
