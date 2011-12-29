@@ -142,6 +142,9 @@ function rebase() {
 
 alias wireshark='wireshark -a filesize:102400'
 
+alias uas='sipp -bind_local -i 192.168.138.210 -sf '
+alias uac='sipp -bind_local -i 192.168.140.210 192.168.140.211 -sf '
+
 ## }}}
 ## {{{ set CCBASE environment variable
 
@@ -196,10 +199,11 @@ function sd_objdump() {
     local objectfile
     local disOpt="d"
     local sourceOpt="Sl"
+    local baseOpt=""
     local dumpCmd="objdumpppc"
 
     # loop continues till options finished
-    while getopts ahimswo: opt; do
+    while getopts ahimstwo: opt; do
         case $opt in
             (a)
                 disOpt="D"
@@ -216,9 +220,15 @@ function sd_objdump() {
             (s)
                 sourceOpt=""
                 ;;
+            (t) # Display symbols
+                disOpt=""
+                sourceOpt=""
+                baseOpt="t"
+                ;;
             (h|\?)
                 echo >&2 \
-                "usage: $0 [-a] [-s] [-o objectfile] <start address> <end address>"
+                "usage:  $0 [-a] [-s] [-o objectfile] <start address> <end address>"
+
                 return 1
                 ;;
         esac
@@ -226,7 +236,7 @@ function sd_objdump() {
     (( OPTIND > 1)) && shift $(( OPTIND - 1 ))
 
 
-    if [[ -z ${2} ]]; then
+    if [[ -z ${2} && ${baseOpt} != "t" ]]; then
         echo >&2 \
             "usage: $0 [-a] [-i] [-s] [-o objectfile] <start address> <end address>"
         return 1
@@ -261,8 +271,8 @@ function sd_objdump() {
     fi
 
     # always use wide-screen and demangle names options
-    echo "$dumpCmd -wC${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile"
-    $dumpCmd -wC${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile
+    echo "$dumpCmd -wC${baseOpt}${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile"
+    $dumpCmd -wC${baseOpt}${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile
 }
 
 ## }}}
