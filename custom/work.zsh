@@ -228,6 +228,7 @@ function sd_objdump() {
             (h|\?)
                 echo >&2 \
                 "usage:  $0 [-a] [-s] [-o objectfile] <start address> <end address>"
+                         $0 [-t] [-o objectfile]
 
                 return 1
                 ;;
