@@ -5,7 +5,7 @@
 
 ## {{{ Fix various things on my development machine
 
-[[ -e $HOME/.man.config ]] && alias man="nocorrect man -C $HOME/.man.config" 
+[[ -e $HOME/.man.config ]] && alias man="nocorrect man -C $HOME/.man.config" || alias man="nocorrect man"
 
 ## }}}
 ## {{{ autoload work functions
