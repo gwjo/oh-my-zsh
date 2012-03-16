@@ -4,12 +4,9 @@
 #
 
 prompt_gwjo_precmd() {
-#  setopt LOCAL_OPTIONS
-#  unsetopt XTRACE KSH_ARRAYS
+    setopt LOCAL_OPTIONS
+    unsetopt XTRACE KSH_ARRAYS
 
-#  setopt prompt_subst
-#  autoload colors
-#  colors
     vcs_info
 
     # Get the width of the terminal
