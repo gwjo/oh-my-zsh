@@ -4,6 +4,12 @@
 #
 
 prompt_gwjo_precmd() {
+#  setopt LOCAL_OPTIONS
+#  unsetopt XTRACE KSH_ARRAYS
+
+#  setopt prompt_subst
+#  autoload colors
+#  colors
     vcs_info
 
     # Get the width of the terminal
@@ -41,8 +47,8 @@ prompt_gwjo_precmd() {
 
     ## Build the bottom line
     local -a bottom
-    bottom+=( "%(1j.%{$fg_bold[black]%}[%j]%{$reset_color%} .)" ) # jobs
-    bottom+=( "%(?..%{$fg[red]%}$?%{$fg_bold[black]%}:)%(!.%{$fg[red]%}.%{$fg[white]%})%#%{$reset_color%} " )
+    bottom+=( "%(1j.%{$fg[black]%}[%j]%{$reset_color%} .)" ) # jobs
+    bottom+=( "%(?..%{$fg[red]%}$?%{$fg[black]%}:)%(!.%{$fg[red]%}.%{$fg[white]%})%#%{$reset_color%} " )
 
     
     ## now assemble the prompt
@@ -59,9 +65,9 @@ prompt_gwjo_precmd() {
 
     # Right prompt
     #   time and date
-    RPROMPT='  %{$fg_bold[black]%}%T %D{%a,%b%d}%{$reset_color%}'
+    #RPROMPT='  %{%F[black]%}%T %D{%a,%b%d}%{$FX[normal]%}'
 
-    PS2='%{$fg_bold[black]%}%_%  > %{$reset_color%}'
+    PS2='%{$fg[black]%}%_%  > %{$reset_color%}'
 }
 
 # Show remote ref name and number of commits ahead-of or behind
@@ -77,12 +83,12 @@ function +vi-git-st() {
         # for git prior to 1.7
         # ahead=$(git rev-list origin/${hook_com[branch]}..HEAD | wc -l)
         ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
-        (( $ahead )) && gitstatus+=( "%{$fg[green]%}+${ahead}%{$fg_bold[black]%}" )
+        (( $ahead )) && gitstatus+=( "%{$fg[green]%}+${ahead}%{$fg[black]%}" )
 
         # for git prior to 1.7
         # behind=$(git rev-list HEAD..origin/${hook_com[branch]} | wc -l)
         behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
-        (( $behind )) && gitstatus+=( "%{$fg[red]%}-${behind}%{$fg_bold[black]%}" )
+        (( $behind )) && gitstatus+=( "%{$fg[red]%}-${behind}%{$fg[black]%}" )
 
         hook_com[branch]="${hook_com[branch]} [${remote} ${(j:/:)gitstatus}]"
     fi
@@ -99,6 +105,8 @@ function +vi-git-stash() {
 }
 
 function prompt_gwjo_setup() {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
 
   setopt prompt_subst
   autoload colors
@@ -115,10 +123,10 @@ function prompt_gwjo_setup() {
 
   # hash changes branch misc
   zstyle ':vcs_info:git*' formats "(%s) %12.12i %c%u %b%m" # hash changes branch misc
-  zstyle ':vcs_info:git*' actionformats "(%s|%{$bg[white]%}%a%{$bg[gray]%}) %12.12i %c%u %b%m"
+  zstyle ':vcs_info:git*' actionformats "(%s|%{$fg_bold[white]%}%a%{$fg_bold[gray]%}) %12.12i %c%u %b%m"
 
-  zstyle ':vcs_info:git*:*' stagedstr "%{$fg[green]%}S%{$fg_bold[black]%}"
-  zstyle ':vcs_info:git*:*' unstagedstr "%{$fg[red]%}U%{$fg_bold[black]%}"
+  zstyle ':vcs_info:git*:*' stagedstr "%{$fg[green]%}S%{$fg[black]%}"
+  zstyle ':vcs_info:git*:*' unstagedstr "%{$fg[red]%}U%{$fg[black]%}"
 
   # hooks to customize vcs output
   zstyle ':vcs_info:git*+set-message:*' hooks git-st git-stash
