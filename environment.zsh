@@ -10,8 +10,9 @@ autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
 
 # General
+setopt BRACE_CCL          # Allow brace character class list expansion.
 setopt RC_QUOTES          # Allow 'Henry''s Garage' instead of 'Henry'\''s Garage'.
-unsetopt MAIL_WARNING     # Don't print a warning message if a mail file has been accessed
+unsetopt MAIL_WARNING     # Don't print a warning message if a mail file has been accessed.
 
 # Jobs
 setopt LONG_LIST_JOBS     # List jobs in the long format by default.
@@ -93,7 +94,7 @@ fi
 export LESSCHARSET="UTF-8"
 export LESSHISTFILE='-'
 export LESSEDIT='vim ?lm+%lm. %f'
-export LESS='-F -g -i -M -R -S -w -X -z-4'
+export LESS='-F -g -i -M -R -S -w -z-4'
 
 if (( $+commands[lesspipe.sh] )); then
   export LESSOPEN='| /usr/bin/env lesspipe.sh %s 2>&-'
