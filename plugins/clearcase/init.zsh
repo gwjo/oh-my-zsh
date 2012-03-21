@@ -1,7 +1,16 @@
+## Aliases
+
 alias ctco='cleartool co -nc'
 alias ctci='cleartool ci -cq'
 alias ctact='cleartool lsact -cact -short'
 alias cthijack='cleartool ls -visible | grep hijacked | cut -d "@" -f 1'
+
+## autoload functions
+
+autoload sv
+autoload _clearcase_getviews
+
+## Functions
 
 function mkact() {
 
