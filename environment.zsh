@@ -111,3 +111,11 @@ if zstyle -t ':omz:environment:termcap' color; then
   export LESS_TERMCAP_us=$'\E[01;32m'      # begin underline
 fi
 
+
+# Report who logs into my machines
+LOGCHECK=60
+WATCHFMT="[%B%T %w%b] %B%n%b has %a %B%l%b from %B%M%b"
+WATCH=notme
+
+# Report commands that run longer than a minute - useful for timing builds
+REPORTTIME=60

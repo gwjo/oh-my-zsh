@@ -19,7 +19,7 @@ zstyle ':omz:prompt' vicmd '<<<'
 zstyle ':omz:completion' indicator '...'
 
 # Beep on error in line editor.
-setopt BEEP
+setopt NO_BEEP
 
 # Reset to default key bindings.
 bindkey -d

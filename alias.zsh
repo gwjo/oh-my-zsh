@@ -139,3 +139,13 @@ fi
 (( $+commands[heroku] )) && alias heroku='nocorrect heroku'
 (( $+commands[mysql] )) && alias mysql='nocorrect mysql'
 
+
+# unalias which
+#
+# reverse unwanted aliasing of `which' by distribution startup
+# files (e.g. /etc/profile.d/which*.sh); zsh's 'which' is perfectly
+# good as is.
+alias which >&/dev/null && unalias which
+
+
+
