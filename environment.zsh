@@ -22,49 +22,6 @@ unsetopt BG_NICE          # Don't run all background jobs at a lower priority.
 unsetopt HUP              # Don't kill jobs on shell exit.
 setopt CHECK_JOBS       # Don't report on jobs when shell exit.
 
-# PATH
-typeset -U cdpath fpath mailpath manpath path
-typeset -UT INFOPATH infopath
-
-cdpath=(
-  $HOME
-  $HOME/Developer
-  $cdpath
-)
-
-infopath=(
-  $HOME/.tilde/share/info
-  $HOME/.tilde/opt/share/info
-  /usr/local/share/info
-  /usr/share/info
-  $infopath
-)
-
-manpath=(
-  $HOME/.tilde/share/man
-  $HOME/.tilde/opt/share/man
-  /usr/local/share/man
-  /usr/share/man
-  $manpath
-)
-
-for path_file in /etc/manpaths.d/*(.N); do
-  manpath+=($(<$path_file))
-done
-
-path=(
-  $HOME/.tilde/{bin,sbin}
-  $HOME/.tilde/opt/{bin,sbin}
-  /usr/local/{bin,sbin}
-  /usr/{bin,sbin}
-  /{bin,sbin}
-  $path
-)
-
-for path_file in /etc/paths.d/*(.N); do
-  path+=($(<$path_file))
-done
-
 # Language
 if [[ -z "$LANG" ]]; then
   eval "$(locale)"
