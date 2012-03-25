@@ -12,8 +12,11 @@ fi
 
 # The default styles.
 
+# Indicator to notify of vi insert mode.
+zstyle ':omz:prompt:vi' insert '>>>'
+
 # Indicator to notify of vi command mode.
-zstyle ':omz:prompt' vicmd '<<<'
+zstyle ':omz:prompt:vi' command '<<<'
 
 # Indicator to notify of generating completion.
 zstyle ':omz:completion' indicator '...'
@@ -61,42 +64,22 @@ keyinfo=(
   'BackTab'   "$terminfo[kcbt]"
 )
 
-# Restores RPROMPT when exiting vicmd.
-function vi-restore-rprompt() {
-  if (( $+RPROMPT_CACHED )); then
-    RPROMPT="$RPROMPT_CACHED"
-    unset RPROMPT_CACHED
-    zle reset-prompt
-    return 0
+# Displays the current vi mode.
+function zle-line-init zle-line-finish zle-keymap-select {
+  if [[ "$KEYMAP" == 'vicmd' ]]; then
+    zstyle -s ':omz:prompt:vi' command 'vi_prompt_info'
+  else
+    zstyle -s ':omz:prompt:vi' insert 'vi_prompt_info'
   fi
-  return 1
-}
-add-zsh-trap INT vi-restore-rprompt
-
-# Displays the current vi mode (command).
-function zle-keymap-select() {
-  if ! vi-restore-rprompt && [[ "$KEYMAP" == 'vicmd' ]]; then
-    RPROMPT_CACHED="$RPROMPT"
-    zstyle -s ':omz:prompt' vicmd RPROMPT
-    zle reset-prompt
-  fi
-}
-zle -N zle-keymap-select
-
-# Resets the prompt after exiting edit-command-line.
-function zle-line-init() {
-  vi-restore-rprompt
+  zle reset-prompt
+  zle -R
 }
 zle -N zle-line-init
-
-# Resets the prompt after the line has been accepted.
-function zle-line-finish() {
-  vi-restore-rprompt
-}
 zle -N zle-line-finish
+zle -N zle-keymap-select
 
 # Expands .... to ../..
-function expand-dot-to-parent-directory-path() {
+function expand-dot-to-parent-directory-path {
   if [[ $LBUFFER = *.. ]]; then
     LBUFFER+='/..'
   else
@@ -106,7 +89,7 @@ function expand-dot-to-parent-directory-path() {
 zle -N expand-dot-to-parent-directory-path
 
 # Displays an indicator when completing.
-function expand-or-complete-with-indicator() {
+function expand-or-complete-with-indicator {
   local indicator
   zstyle -s ':omz:completion' indicator 'indicator'
   print -Pn "$indicator"
@@ -116,7 +99,7 @@ function expand-or-complete-with-indicator() {
 zle -N expand-or-complete-with-indicator
 
 # Inserts 'sudo ' at the beginning of the line.
-function prepend-sudo() {
+function prepend-sudo {
   if [[ "$BUFFER" != su(do|)\ * ]]; then
     BUFFER="sudo $BUFFER"
     (( CURSOR += 5 ))

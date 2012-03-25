@@ -6,7 +6,7 @@
 #
 
 # Gets the path to the Git directory.
-function _git-dir() {
+function _git-dir {
   local git_root="$(git-root)"
   local git_dir_or_file="${git_root}/.git"
   local git_dir
@@ -31,7 +31,7 @@ function _git-dir() {
 
 # Gets the Git special action (am, merge, rebase, etc.).
 # Borrowed from vcs_info and edited.
-function _git-action() {
+function _git-action {
   local action=''
   local action_dir
   local git_dir="$(_git-dir)"
@@ -90,7 +90,7 @@ function _git-action() {
 }
 
 # Turns off git-info for the current repository.
-function _git-info-abort() {
+function _git-info-abort {
   if ! is-true "$_git_info_executing"; then
     return 1
   fi
@@ -115,7 +115,7 @@ EOF
 add-zsh-trap INT _git-info-abort
 
 # Gets the Git status information.
-function git-info() {
+function git-info {
   # Extended globbing is needed to parse repository status.
   setopt LOCAL_OPTIONS
   setopt EXTENDED_GLOB
@@ -140,7 +140,6 @@ function git-info() {
   local clean
   local clean_formatted
   local commit
-  local commit_short
   local commit_format
   local deleted=0
   local deleted_format
@@ -219,10 +218,11 @@ function git-info() {
   # Get commit.
   commit="$(git rev-parse HEAD 2>/dev/null)"
 
-  # Format commit (short).
-  commit_short="$commit[1,7]"
-  zstyle -s ':omz:plugin:git:prompt' commit 'commit_format'
-  zformat -f commit_formatted "$commit_format" "c:$commit_short"
+  # Format commit.
+  if [[ -n "$commit" ]]; then
+    zstyle -s ':omz:plugin:git:prompt' commit 'commit_format'
+    zformat -f commit_formatted "$commit_format" "c:$commit"
+  fi
 
   # Stashed
   if [[ -f "$(_git-dir)/refs/stash" ]]; then
@@ -231,18 +231,14 @@ function git-info() {
     zformat -f stashed_formatted "$stashed_format" "S:$stashed"
   fi
 
-  # Assume that the working copy is clean.
-  zstyle -s ':omz:plugin:git:prompt' clean 'clean_formatted'
-
   while IFS=$'\n' read line; do
     (( line_number++ ))
 
     if (( line_number == 1 )) && [[ "$line" == *'(no branch)'* ]]; then
-      # Set branch to commit (short) when the branch is not found.
-      branch="$commit_short"
-
       # Get action.
       action="$(_git-action)"
+
+      # Format action.
       if [[ -n "$action" ]]; then
         zstyle -s ':omz:plugin:git:prompt' action 'action_format'
         zformat -f action_formatted "$action_format" "s:$action"
@@ -279,22 +275,24 @@ function git-info() {
       fi
     else
       # Count added, deleted, modified, renamed, unmerged, untracked, dirty.
-      [[ "$line" == (((A|M|D|T) )|(AD|AM|AT|MM))\ * ]] && (( added++ ))
-      [[ "$line" == ( D|AD)\ * ]] && (( deleted++ ))
-      [[ "$line" == (( (M|T))|(AM|AT|MM))\ * ]] && (( modified++ ))
-      [[ "$line" == R\ \ * ]] && (( renamed++ ))
-      [[ "$line" == UU\ * ]] && (( unmerged++ ))
+      # T (type change) is undocumented, see http://git.io/FnpMGw.
+      # For a table of scenarii, see http://i.imgur.com/2YLu1.png.
+      [[ "$line" == ([ACDMT][\ MT]|[ACMT]D)\ * ]] && (( added++ ))
+      [[ "$line" == [\ ACMRT]D\ * ]] && (( deleted++ ))
+      [[ "$line" == ?[MT]\ * ]] && (( modified++ ))
+      [[ "$line" == R?\ * ]] && (( renamed++ ))
+      [[ "$line" == (AA|DD|U?|?U)\ * ]] && (( unmerged++ ))
       [[ "$line" == \?\?\ * ]] && (( untracked++ ))
       (( dirty++ ))
     fi
   done < <("${(z)status_cmd}" 2>/dev/null)
 
   # Format branch.
-  zstyle -s ':omz:plugin:git:prompt' branch 'branch_format'
-  zformat -f branch_formatted "$branch_format" "b:$branch"
+  if [[ -n "$branch" ]]; then
+    zstyle -s ':omz:plugin:git:prompt' branch 'branch_format'
+    zformat -f branch_formatted "$branch_format" "b:$branch"
 
-  # Format remote.
-  if [[ "$branch" != "$commit" ]]; then
+    # Format remote.
     if [[ -z "$remote" ]]; then
       remote="${$( \
         git rev-parse \
@@ -357,7 +355,8 @@ function git-info() {
   if (( $dirty > 0 )); then
     zstyle -s ':omz:plugin:git:prompt' dirty 'dirty_format'
     zformat -f dirty_formatted "$dirty_format" "D:$dirty"
-    unset clean_formatted
+  else
+    zstyle -s ':omz:plugin:git:prompt' clean 'clean_formatted'
   fi
 
   # Format prompts.
