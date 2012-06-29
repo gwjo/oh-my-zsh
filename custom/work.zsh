@@ -182,6 +182,42 @@ function ppcod() {
 }
 
 ## }}}
+## {{{ setup_sd_env
+
+function setup_sd_env() {
+    emulate -L zsh
+
+    # Pesky bash WINDVERSION changes uses the non-standard bash format:
+    #
+    #  if [ $string == "blah" ]
+    #
+    # which means we need to ensure the EQUALS option is not set
+    #
+    unsetopt equals
+
+    cc_set_ccbase
+#    if [[ cc_set_ccbase() ]] ; then
+#        return 1
+#    fi
+
+    local WIND_VERSION=`bash $CC_BASE/acme/lib/common/acmeVersion.sh -wind`
+
+    # TCLLIBPATH:
+    #   Need to save and restore the environ variable because of a stupid bug
+    #   the environment setup script that relies on some incorrect behavior
+    #   of BASH
+    local savedTclLibPath=${TCLLIBPATH}
+    TCLLIBPATH=""
+
+    # setup environment
+    $WIND_VERSION
+
+    # Restore TCLLIBPATH
+    TCLLIBPATH=${savedTclLibPath}
+}
+
+
+## }}}
 ## {{{ Objdump (by default ppc)
 
 function sd_objdump() {
