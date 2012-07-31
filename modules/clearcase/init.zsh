@@ -45,12 +45,37 @@ function ctlocks() {
 }
 
 function ctpdiff() {
-    if [[ $1 == "-h" ]] ; then
-        local base
-        base=$(cleartool ls $2 | grep hijacked | cut -d " " -f 1)
+    local base
+    local mode="pre"
+    local disOpt="-graphical"
 
-        cleartool diff -graphical $base $2
-    else 
-        cleartool diff -graphical -pre $1
-    fi
+    while getopts hx opt; do
+        case $opt in
+            (h)
+                mode="hijack"
+                ;;
+            (i)
+                mode="integration"
+                ;;
+            (x)
+                disOpt=""
+                ;;
+        esac
+    done
+
+    
+    case $mode in
+        (hijack)
+            base=$(cleartool ls $2 | grep hijacked | cut -d " " -f 1)
+            ;;
+        (pre)
+            disOpt="$disOpt -pre"
+            ;;
+        (integration)
+            echo "Not currently supported"
+            ;;
+    esac
+
+    cleartool diff $disOpt $1
+
 }
