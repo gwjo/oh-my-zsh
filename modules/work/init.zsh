@@ -203,7 +203,8 @@ function setup_sd_env() {
     $WIND_VERSION
 
     # Restore TCLLIBPATH
-    TCLLIBPATH=${savedTclLibPath}}
+    TCLLIBPATH=${savedTclLibPath}
+}
 
 ## }}}
 ## {{{ Objdump (by default ppc)
