@@ -139,6 +139,9 @@ alias wireshark='wireshark -a filesize:102400'
 alias uas='sipp -bind_local -i 192.168.138.210 -sf '
 alias uac='sipp -bind_local -i 192.168.140.210 192.168.140.211 -sf '
 
+alias rsh='/usr/bin/rsh'
+alias rcp='/usr/bin/rcp'
+
 ## }}}
 ## {{{ set CCBASE environment variable
 
