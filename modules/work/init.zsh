@@ -251,7 +251,7 @@ function sd_objdump() {
                 ;;
         esac
     done
-    (( OPTIND > 1)) && shift $(( OPTIND - 1 ))
+    (( OPTIND > 1 )) && shift $(( OPTIND - 1 ))
 
 
     if [[ -z ${2} && ${baseOpt} != "t" ]]; then
