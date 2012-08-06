@@ -273,7 +273,7 @@ function sd_objdump() {
         fi
     fi
 
-    set_sd_env()
+    setup_sd_env
 
     # always use wide-screen and demangle names options
     echo "$dumpCmd -wC${baseOpt}${disOpt}${sourceOpt} --start-address=${1} --stop-address=${2} $objectfile"
