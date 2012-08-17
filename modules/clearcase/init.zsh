@@ -66,7 +66,7 @@ function ctpdiff() {
 
     case $mode in
         hijack)
-            base=$(cleartool ls $2 | grep hijacked | cut -d " " -f 1)
+            base=$(cleartool ls $1 | grep hijacked | cut -d " " -f 1)
             ;;
         pre)
             disOpt="-pred ${disOpt}"
@@ -77,6 +77,6 @@ function ctpdiff() {
             ;;
     esac
 
-    cleartool diff ${=disOpt} $1
+    cleartool diff ${=disOpt} $base $1
 
 }
