@@ -52,12 +52,12 @@ function sv {
     if [[ -n $keep ]] ; then
         # get the current sub-directory so we
         # can cd to it after switching views
-        view=$(/usr/local/acme/bin/ccbase 2> /dev/null)
+        view1=$(/usr/local/acme/bin/ccbase 2> /dev/null)
 
         # just ignore the error if there isn't a current
         # view
-        if [[ -n $view ]] ; then
-          subdir=${PWD#"${view}/"}
+        if [[ -n $view1 ]] ; then
+          subdir=${PWD#"${view1}/"}
         fi
     fi
 
@@ -99,14 +99,15 @@ function sv {
         fi
     fi
 
+
+    # add subdir
+    [[ -n $subdir ]] && view="$view/$subdir"
+
     # check that view exists
     { cd ${~view} } 2> /dev/null
 
     # echo the view to the command line
-    view=$(pwd)
-    
-    [[ -n $subdir ]] && cd $subdir
-
+    view=$(/usr/local/acme/bin/ccbase 2> /dev/null)
     echo ${view:t}
 }
 
