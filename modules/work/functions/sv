@@ -59,6 +59,11 @@ function sv {
         if [[ -n $view1 ]] ; then
           subdir=${PWD#"${view1}/"}
         fi
+
+        # clear subdir if the above substitution failed
+        if [[ "$PWD" == "$subdir" ]] ; then
+          subdir=""
+        fi
     fi
 
     if [[ ( -n $integration || -n $keep ) && -z $1 ]] ; then
