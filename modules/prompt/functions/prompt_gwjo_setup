@@ -64,7 +64,7 @@ prompt_gwjo_precmd() {
     #   time and date
     #RPROMPT='  %{%F[black]%}%T %D{%a,%b%d}%{$FX[normal]%}'
 
-    PS2='%{$fg[black]%}%_%  > %{$reset_color%}'
+    PS2="%{$fg[black]%}%_%  > %{$reset_color%}"
 }
 
 # Show remote ref name and number of commits ahead-of or behind
